@@ -60,6 +60,26 @@
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                             </div>
                         </div>
+                        <div class="row-md-6 offset-md-4 d-flex">
+
+                            <div class="m-2">
+                                <label> Doctor</label>
+                                <input type="checkbox"  name="is_doctor" {{old('is_doctor')}}  value="">
+                               @error('is_doctor ') <span class="text-danger">{{$message}}</span>@enderror
+                            </div>
+
+                           <div class="m-2">
+                                    <label > Student</label>
+                                    <input type="checkbox"  name="is_student"  {{old('is_student')}}  value="">
+                                @error('is_student') <span class="text-danger">{{$message}}</span>@enderror
+                            </div>
+
+                        </div>
+
+
+
+
+
 
                         <div class="row mb-0">
                             <div class="col-md-6 offset-md-4">

@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+
 
 class RegisterController extends Controller
 {
@@ -28,7 +30,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/user/profile';
 
     /**
      * Create a new controller instance.
@@ -48,13 +50,31 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+
+        // dd(isset($data['is_doctor']));
+        // if (array_key_exists('is_doctor', $data)){
+        //     dd('in');
+        // }
+        // dd('out');
+        // if($data['is_doctor']){
+        //     dd('in');
+        // }
+        // dd('out');
+
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-    }
 
+        ]);
+        if (array_key_exists('is_doctor', $data)){
+            return view('string');
+        }
+      elseif(array_key_exists('is_student', $data)){
+        return view('string');
+
+    }
+    }
     /**
      * Create a new user instance after a valid registration.
      *
