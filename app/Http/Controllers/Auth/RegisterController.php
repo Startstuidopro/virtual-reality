@@ -71,7 +71,7 @@ class RegisterController extends Controller
             return view('string');
         }
       elseif(array_key_exists('is_student', $data)){
-        return view('string');
+        return view('user.profile');
 
     }
     }
