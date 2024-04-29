@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\QuestionController;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\user\ProfileController;
+// use App\Http\Controllers\backend\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -31,4 +33,9 @@ Route::get('question/index', [QuestionController::class, 'index'])->name('questi
 
 Auth::routes();
 
+
+Route::get('user/profile', [ProfileController::class, 'index'])->name('user.profile')->Middleware('auth');
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes(['verify'=>true]);
