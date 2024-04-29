@@ -13,3 +13,4 @@
                         </div>
                     @endif
                     <a href="{{ route('questions.create') }}" class="btn btn-primary mb-3">
+
