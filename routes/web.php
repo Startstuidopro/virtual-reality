@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\user\ProfileController;
+use App\Http\Controllers\QuestionController;
 // use App\Http\Controllers\backend\UserController;
 /*
 |--------------------------------------------------------------------------
