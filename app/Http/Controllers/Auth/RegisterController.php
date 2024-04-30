@@ -67,13 +67,12 @@ class RegisterController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
 
         ]);
-        if (array_key_exists('is_doctor', $data)){
+        if (array_key_exists('is_doctor', $data)) {
             return view('string');
-        }
-      elseif(array_key_exists('is_student', $data)){
-        return view('user.profile');
+        } elseif (array_key_exists('is_student', $data)) {
+            return view('user.profile');
 
-    }
+        }
     }
     /**
      * Create a new user instance after a valid registration.
