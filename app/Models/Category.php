@@ -5,10 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Question extends Model
+class Category extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        'question', 'answer', 'score'
+    protected $table ='cat';
+    protected $fillable=[
+        	'name',	'description',
+             'reselt'
     ];
+
 }

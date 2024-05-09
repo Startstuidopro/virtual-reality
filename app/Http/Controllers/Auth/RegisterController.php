@@ -68,7 +68,7 @@ class RegisterController extends Controller
 
         ]);
         if (array_key_exists('is_doctor', $data)) {
-            return view('string');
+            return view('category.index');
         } elseif (array_key_exists('is_student', $data)) {
             return view('user.profile');
 

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\user\ProfileController;
+use App\Http\Controllers\CategoryController;
 // use App\Http\Controllers\backend\UserController;
 /*
 |--------------------------------------------------------------------------
@@ -15,21 +16,21 @@ use App\Http\Controllers\user\ProfileController;
 |
 */
 
-Route::get('question/index', [QuestionController::class, 'index'])->name('question.index');
-Route::get('question/craete', [QuestionController::class, 'create'])->name('questions.create');
-Route::post('question/store', [QuestionController::class, 'store'])->name('question.store');
-Route::get('question/edit/{id}', [QuestionController::class, 'edit'])->name('question.edit');
-Route::post('question/update/{id}', [QuestionController::class, 'update'])->name('question.update');
-Route::get('question/delete/{id}', [QuestionController::class, 'destroy'])->name('question.destroy');
 
 
+Route::get('category/index', [CategoryController::class, 'index'])->name('category.index');
+Route::get('category/craete', [CategoryController::class, 'create'])->name('category.create');
+Route::post('category/store', [CategoryController::class, 'store'])->name('category.store');
+Route::get('category/edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
+Route::post('category/update/{id}', [CategoryController::class, 'update'])->name('category.update');
+Route::get('category/delete/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
 
 
 
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('question/index', [QuestionController::class, 'index'])->name('question.index');
+
 
 Auth::routes();
 
