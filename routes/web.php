@@ -2,9 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\user\ProfileController;
-use App\Http\Controllers\CategoryController;
-// use App\Http\Controllers\backend\UserController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ExamController;
+use App\Http\Controllers\QuestionController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,27 +17,35 @@ use App\Http\Controllers\CategoryController;
 |
 */
 
-
-
-Route::get('category/index', [CategoryController::class, 'index'])->name('category.index');
-Route::get('category/craete', [CategoryController::class, 'create'])->name('category.create');
-Route::post('category/store', [CategoryController::class, 'store'])->name('category.store');
-Route::get('category/edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
-Route::post('category/update/{id}', [CategoryController::class, 'update'])->name('category.update');
-Route::get('category/delete/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
-
-
-
 Route::get('/', function () {
     return view('welcome');
 });
 
+Auth::routes(); 
 
-Auth::routes();
+// User Routes 
+Route::middleware(['auth'])->group(function () { // Protect all user-related routes
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+});
 
+// Exam Routes 
+Route::middleware(['auth'])->group(function() {
+    Route::resource('exams', ExamController::class);
+});
 
-Route::get('user/profile', [ProfileController::class, 'index'])->name('user.profile')->Middleware('auth');
+// Question Routes (Nested within Exams)
+Route::middleware(['auth'])->prefix('exams/{exam}')
+     ->group(function () {
+        Route::get('/questions/create', [QuestionController::class, 'create'])->name('questions.create');
+        Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
+        Route::get('/questions/{question}/edit', [QuestionController::class, 'edit'])->name('questions.edit');
+        Route::put('/questions/{question}', [QuestionController::class, 'update'])->name('questions.update');
+        Route::delete('/questions/{question}', [QuestionController::class, 'destroy'])->name('questions.destroy');
+     });
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Auth::routes(['verify'=>true]);
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -1,6 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
+
+
+@if(Session::has('error'))
+    <h1  style="color:red; font-size:20px">{{session('error')}}</h1>
+    {{ Session::forget('error') }}
+@endif
+
+
 <main class="main">
 <br>
 <div class="card">
@@ -8,7 +16,7 @@
         <div class="col-md-12">
             <div class="card ">
                 <div class="card text-dark bg-info mb-3">
-                    <h2>  تعديل الفئه  </h2>
+                    <h2>   Eidit Question  </h2>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('category.update',$temp->id) }}" method="POST">
@@ -30,6 +38,7 @@
                             <label for="reselt">Reselt</label>
                             <input type="text" name="reselt" id="reselt" class="form-control"  value="{{$temp->reselt}}">
                             @error('reselt') <span class="text-danger">{{$message}}</span>@enderror
+                            
                         </div>
 
                         <br>

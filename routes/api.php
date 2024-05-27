@@ -1,7 +1,10 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\StudentController;
+use App\Http\Controllers\API\ExamController;
+use App\Http\Controllers\API\ExamAttemptController; 
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +17,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Authentication Routes (using Sanctum)
+Route::post('/login', [AuthController::class, 'login']); 
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+// Protected Routes 
+Route::middleware('auth:sanctum')->group(function() {
+    // Student Profile 
+    Route::get('/me', [StudentController::class, 'show']); 
+    Route::put('/me', [StudentController::class, 'update']);
+
+    // Exams 
+    Route::apiResource('exams', ExamController::class)->only(['index', 'show']); 
+
+    // Exam Attempts 
+    Route::prefix('exams/{exam}/attempts')
+         ->group(function () {
+            Route::post('/', [ExamAttemptController::class, 'start'])->name('exams.attempts.start');
+            Route::get('/{attempt}', [ExamAttemptController::class, 'show'])->name('exams.attempts.show');
+            Route::put('/{attempt}', [ExamAttemptController::class, 'submit'])->name('exams.attempts.submit');
+        }); 
+}); 

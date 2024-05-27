@@ -1,6 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
+
+
+@if(Session::has('error'))
+    <h1  style="color:rgb(254, 254, 254); font-size:20px">{{session('error')}}</h1>
+    {{ Session::forget('error') }}
+@endif
+
     <br>
     <div class="card">
         <div class="row">
@@ -24,13 +31,14 @@
                             </div>
                             <div class="form-group">
                                 <label for="description">Reselt</label>
-                                <input type="text" name="reselt" id="reselt" class="form-control">
+                                <input type="number" name="reselt" id="reselt" class="form-control">
                             </div>
 
                             <br>
                             <div class="mb-3">
                                 <button type="submit"class="btn btn-primary">save</button>
                             </div>
+                        </form>
                     </div>
                 </div>
             </div>
