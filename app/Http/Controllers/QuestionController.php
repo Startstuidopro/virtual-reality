@@ -34,8 +34,9 @@ class QuestionController extends Controller
 
         return redirect()->route('exams.show', $exam)->with('success', 'Question created successfully!');
     }
-    public function edit(Question $question)
-    {
+    public function edit(Request $request, Exam $exam, $question) 
+{
+    $question = Question::findOrFail($question); 
         $this->authorize('update', $question);
 
         $question->load('exam');
@@ -64,8 +65,9 @@ class QuestionController extends Controller
         return redirect()->route('exams.show', $question->exam)->with('success', 'Question updated successfully!');
     }
 
-    public function destroy(Question $question)
+    public function destroy(Request $request, Exam $exam, $question) 
     {
+        $question = Question::findOrFail($question); 
         $this->authorize('delete', $question);
 
         $exam = $question->exam;

@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\QuestionController;
@@ -48,4 +47,4 @@ Route::middleware(['auth'])->prefix('exams/{exam}')
         Route::delete('/questions/{question}', [QuestionController::class, 'destroy'])->name('questions.destroy');
      });
 
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
