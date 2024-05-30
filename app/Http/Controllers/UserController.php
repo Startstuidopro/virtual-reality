@@ -50,15 +50,16 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
+        // dd($request->is_active);
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             // Unique email validation, ignoring the current user
             'password' => 'nullable|string|min:8|confirmed', // Password is optional for updates
             'role' => 'required|in:admin,doctor,student',
-            'is_active' => 'sometimes|boolean',
+            // 'is_active' => 'sometimes|boolean',
         ]);
-
+       
         $user->update([
             'name' => $request->name,
             'email' => $request->email,

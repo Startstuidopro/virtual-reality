@@ -14,8 +14,8 @@ class QuestionCategory extends Model
         'description',
     ];
 
-    public function questions()
+    public function questions() 
     {
-        return $this->belongsToMany(Question::class, 'questions_categories');
+        return $this->hasMany(Question::class);
     }
 }

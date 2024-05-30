@@ -53,7 +53,10 @@
                     @endif 
 
                     @if (Auth::user()->role === 'doctor' && $exam->doctor_id === Auth::id())
-                        <a href="{{ route('questions.create', ['exam' => $exam->id]) }}" class="btn btn-primary mt-3">Add Question</a>
+                    <div>
+                                <a href="{{ route('questions.create', ['exam' => $exam->id]) }}" class="btn btn-primary">Add Question</a>
+                                <a href="{{ route('questions.create.ai', ['exam' => $exam->id]) }}" class="btn btn-success">Add Questions with AI</a>
+                            </div>
                     @endif
                 </div>
             </div>

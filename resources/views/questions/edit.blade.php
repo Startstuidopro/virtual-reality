@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Edit Question') }} (for Exam: {{ $question->exam->name }})</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('questions.update', $question->id) }}">
+                <form method="POST" action="{{ route('questions.update', ['exam' => $question->exam->id, 'question' => $question->id]) }}">
                         @csrf
                         @method('PUT')
 
@@ -22,7 +22,17 @@
                                 </span>
                             @enderror
                         </div>
-
+                        <div class="form-group">
+    <label for="category_id">{{ __('Category') }}</label>
+    <select class="form-control" id="category_id" name="category_id" required>
+        <option value="">Select Category</option>
+        @foreach ($categories as $category)
+            <option value="{{ $category->id }}" {{ old('category_id', $question->category_id ?? '') == $category->id ? 'selected' : '' }}>
+                {{ $category->name }}
+            </option>
+        @endforeach
+    </select>
+</div>
                         <div class="form-group">
                             <label for="answer_type">{{ __('Answer Type') }}</label>
                             <select class="form-control @error('answer_type') is-invalid @enderror" id="answer_type" name="answer_type" required>

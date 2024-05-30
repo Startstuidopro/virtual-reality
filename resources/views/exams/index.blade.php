@@ -24,7 +24,9 @@
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Description</th>
-                                <th>Doctor</th> 
+                                @if(Auth::user()->role !== 'student')
+                                    <th>Doctor</th> 
+                                @endif
                                 <th>Actions</th> 
                             </tr>
                         </thead>
@@ -34,16 +36,23 @@
                                     <td>{{ $exam->id }}</td>
                                     <td>{{ $exam->name }}</td>
                                     <td>{{ $exam->description }}</td>
-                                    <td>{{ $exam->doctor->name }}</td>  
+                                    @if(Auth::user()->role !== 'student')
+                                        <td>{{ $exam->doctor->name }}</td>  
+                                    @endif
                                     <td>
-                                        <a href="{{ route('exams.show', $exam->id) }}" class="btn btn-sm btn-info">View</a>
+                                        @if (Auth::user()->role === 'student')
+                                            <a href="{{ route('exams.attempts.show', [$exam, $exam->attempts->where('student_id', Auth::id())->first()]) }}" class="btn btn-sm btn-info">View My Attempt</a>
+                                        @elseif (Auth::user()->role === 'doctor')
                                         @if (Auth::user()->role === 'doctor' && $exam->doctor_id === Auth::id())
+                                            <a href="{{ route('exams.attempts.index', $exam->id) }}" class="btn btn-sm btn-info">View Attempts</a>
+                                            <a href="{{ route('exams.show', $exam->id) }}" class="btn btn-sm btn-info">View</a>
                                             <a href="{{ route('exams.edit', $exam->id) }}" class="btn btn-sm btn-primary">Edit</a>
                                             <form action="{{ route('exams.destroy', $exam->id) }}" method="POST" style="display: inline-block;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
                                             </form>
+                                            @endif
                                         @endif
                                     </td>
                                 </tr>

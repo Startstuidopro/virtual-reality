@@ -22,4 +22,9 @@ class OllamaAssessment extends Model
     {
         return $this->belongsTo(Answer::class);
     }
+    // In Question model
+public function categories()
+{
+    return $this->belongsToMany(QuestionCategory::class, 'questions_categories');
+}
 }

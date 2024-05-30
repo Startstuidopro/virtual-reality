@@ -19,8 +19,14 @@ class ExamController extends Controller
     {
         if (Auth::user()->role === 'admin') {
             $exams = Exam::all(); // Admins see all exams
+        } elseif (Auth::user()->role === 'student') {
+            // Students see exams they have attempted
+            $exams = Exam::whereHas('attempts', function ($query) {
+                $query->where('student_id', Auth::id());
+            })->get();
         } else {
-            $exams = Exam::where('doctor_id', Auth::id())->get(); // Doctors see their exams
+            // Doctors see their own exams
+            $exams = Exam::where('doctor_id', Auth::id())->get(); 
         }
 
         return view('exams.index', ['exams' => $exams]);
@@ -28,8 +34,13 @@ class ExamController extends Controller
 
     public function create()
     {
-        $doctors = User::where('role', 'doctor')->get();
-        return view('exams.create', ['doctors' => $doctors]);
+        if (Auth::user()->role === 'doctor')
+        {
+        // $doctors = User::where('role', 'doctor')->get();
+        return view('exams.create', ['doctors' => [Auth::user()]]);}
+        else{
+            return redirect()->route('exams.index');
+        }
     }
 
     public function store(Request $request)
@@ -45,15 +56,25 @@ class ExamController extends Controller
         return redirect()->route('exams.index')->with('success', 'Exam created successfully!');
     }
 
-    public function show(Exam $exam)
+    public function show( $exam)
     {
-        return view('exams.show', ['exam' => $exam]);
+       
+        $exa = Exam::findOrFail($exam);
+        return view('exams.show', ['exam' => $exa]);
     }
 
     public function edit(Exam $exam)
     {
-        $doctors = User::where('role', 'doctor')->get();
-        return view('exams.edit', ['exam' => $exam, 'doctors' => $doctors]);
+        if (Auth::user()->role === 'doctor')
+        {
+        // $doctors = User::where('role', 'doctor')->get();
+        return view('exams.edit', ['exam' => $exam, 'doctors' =>[ Auth::user()]]);
+        }
+        else{
+            return redirect()->route('exams.index');
+        }
+       
+       
     }
     public function update(Request $request, Exam $exam)
     {

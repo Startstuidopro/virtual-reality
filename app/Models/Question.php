@@ -14,7 +14,8 @@ class Question extends Model
         'question_text',
         'answer_type',
         'options',
-        'correct_answer'
+        'correct_answer',
+        'category_id'
     ];
 
     protected $casts = [
@@ -31,8 +32,8 @@ class Question extends Model
         return $this->hasMany(Answer::class);
     }
 
-    public function categories()
+    public function category() 
     {
-        return $this->belongsToMany(QuestionCategory::class, 'questions_categories');
+        return $this->belongsTo(QuestionCategory::class);
     }
 }

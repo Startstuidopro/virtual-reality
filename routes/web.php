@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\QuestionController;
-
+use App\Http\Controllers\ExamAttemptController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,7 +37,11 @@ Route::middleware(['auth'])->group(function () { // Protect all user-related rou
 Route::middleware(['auth'])->group(function() {
     Route::resource('exams', ExamController::class);
 });
-
+Route::prefix('exams/{exam}/attempts')
+        ->group(function () {
+            Route::get('/', [ExamAttemptController::class, 'index'])->name('exams.attempts.index');
+            Route::get('/{attempt}', [ExamAttemptController::class, 'show'])->name('exams.attempts.show');
+        });
 // Question Routes (Nested within Exams)
 Route::middleware(['auth'])->prefix('exams/{exam}')
      ->group(function () {
@@ -45,6 +50,8 @@ Route::middleware(['auth'])->prefix('exams/{exam}')
         Route::get('/questions/{question}/edit', [QuestionController::class, 'edit'])->name('questions.edit');
         Route::put('/questions/{question}', [QuestionController::class, 'update'])->name('questions.update');
         Route::delete('/questions/{question}', [QuestionController::class, 'destroy'])->name('questions.destroy');
+        Route::get('/questions/create/ai', [QuestionController::class, 'createWithAI'])->name('questions.create.ai');
+        Route::post('/questions/ai', [QuestionController::class, 'storeAI'])->name('questions.store.ai');
      });
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

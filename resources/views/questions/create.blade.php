@@ -21,6 +21,17 @@
                                 </span>
                             @enderror
                         </div>
+                        <div class="form-group">
+    <label for="category_id">{{ __('Category') }}</label>
+    <select class="form-control" id="category_id" name="category_id" required>
+        <option value="">Select Category</option>
+        @foreach ($categories as $category)
+            <option value="{{ $category->id }}" {{ old('category_id', $question->category_id ?? '') == $category->id ? 'selected' : '' }}>
+                {{ $category->name }}
+            </option>
+        @endforeach
+    </select>
+</div>
 
                         <div class="form-group">
                             <label for="answer_type">{{ __('Answer Type') }}</label>
@@ -53,7 +64,7 @@
                             <input type="text" class="form-control @error('correct_answer') is-invalid @enderror" id="correct_answer" name="correct_answer" value="{{ old('correct_answer') }}" required>
 
                             @error('correct_answer')
-  <span class="invalid-feedback" role="alert">
+                            <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                                 @enderror
