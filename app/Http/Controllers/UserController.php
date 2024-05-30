@@ -59,7 +59,7 @@ class UserController extends Controller
             'role' => 'required|in:admin,doctor,student',
             // 'is_active' => 'sometimes|boolean',
         ]);
-       
+
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
