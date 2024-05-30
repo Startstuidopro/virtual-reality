@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () { // Protect all user-related rou
 // Exam Routes 
 Route::middleware(['auth'])->group(function() {
     Route::resource('exams', ExamController::class);
+    Route::post('/exams/{exam}/attempts/{attempt}/assess', [ExamAttemptController::class, 'assess'])->name('exams.attempts.assess');
 });
 Route::prefix('exams/{exam}/attempts')
         ->group(function () {
@@ -53,5 +54,6 @@ Route::middleware(['auth'])->prefix('exams/{exam}')
         Route::get('/questions/create/ai', [QuestionController::class, 'createWithAI'])->name('questions.create.ai');
         Route::post('/questions/ai', [QuestionController::class, 'storeAI'])->name('questions.store.ai');
      });
+
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

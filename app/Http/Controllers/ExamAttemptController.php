@@ -43,4 +43,13 @@ class ExamAttemptController extends Controller
             'attempts' => $attempts,
         ]);
     }
+    public function assess(Exam $exam, ExamAttempt $attempt)
+{
+    // 1. Authorization: Make sure only the exam's doctor can assess attempts.
+
+    // 2. Call the assessAnswers() function (or dispatch a job) to trigger assessment:
+    $this->assessAnswers($attempt); // Or dispatch a job if using queues
+
+    return redirect()->back()->with('success', 'Assessment initiated!'); 
+}
 }

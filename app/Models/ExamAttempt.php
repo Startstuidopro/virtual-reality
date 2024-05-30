@@ -36,7 +36,11 @@ class ExamAttempt extends Model
     {
         return $this->hasMany(Answer::class, 'attempt_id');
     }
-
+    public function fullyAssessed()
+    {
+        // Check if any answers for this attempt do NOT have an assessment
+        return $this->answers()->whereDoesntHave('assessment')->count() === 0; 
+    }
     public function degree()
     {
         return $this->hasOne(StudentDegree::class);

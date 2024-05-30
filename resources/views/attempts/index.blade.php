@@ -27,6 +27,15 @@
                                     <td>{{ $attempt->submitted ? 'Yes' : 'No' }}</td>
                                     <td>
                                         <a href="{{ route('exams.attempts.show', [$exam, $attempt]) }}" class="btn btn-sm btn-info">View Results</a>
+
+                                        @if (Auth::user()->role === 'doctor' && 
+                                             $attempt->submitted && 
+                                             !$attempt->fullyAssessed()) 
+                                            <form action="{{ route('exams.attempts.assess', [$exam, $attempt]) }}" method="POST" style="display:inline-block;">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-warning">Assess Now</button>
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
