@@ -43,12 +43,12 @@ class GenerateQuestionsJob implements ShouldQueue
      */
     public function handle()
     {
-        // 1. Get the exam 
+        // 1. Get the exam
         $exam = Exam::findOrFail($this->examId);
-        $categories = QuestionCategory::pluck('name', 'id'); 
+        $categories = QuestionCategory::pluck('name', 'id');
         $categoryList = $categories->map(function ($name, $id) {
             return "$id: $name";
-        })->implode(', '); 
+        })->implode(', ');
 
         // 2. Interact with Ollama's API:
         try {
@@ -57,17 +57,17 @@ class GenerateQuestionsJob implements ShouldQueue
                 'messages' => [
                     [
                         'role' => 'user',
-                        'content' =>"Generate {$this->numQuestions} {$this->questionLevel} questions based on this text: {$this->textInput}.
+                        'content' => "Generate {$this->numQuestions} {$this->questionLevel} questions based on this text: {$this->textInput}.
                         For each question, also suggest a category ID from the following list:
-                        {$categoryList}. 
-     
+                        {$categoryList}.
+
                         Return ONLY in the following JSON format - no other text or explanations:
-     
-                        [ 
+
+                        [
                           { \"question\": \"question text\", \"answer\": \"answer\", \"category_id\": category_id },
                           { \"question\": \"question text\", \"answer\": \"answer\", \"category_id\": category_id },
-                          // ... more questions 
-                        ]"                        
+                          // ... more questions
+                        ]"
                     ]
                 ], "format" => "json",
                 'stream' => false, "options" => [
@@ -100,12 +100,11 @@ class GenerateQuestionsJob implements ShouldQueue
                 'answer_type' => 'open_ended', // Or determine from Ollama's response
                 'options' => isset($generatedQuestion['options']) ? json_encode($generatedQuestion['options']) : null,
                 'correct_answer' => $generatedQuestion['answer'],
-                'category_id' => isset($generatedQuestion['category_id']) ? $generatedQuestion['category_id'] : 0,//$request->input('category_id'), // Assuming you still have a category input
+                'degree' => $generatedQuestion['degree'],
+                'category_id' => isset($generatedQuestion['category_id']) ? $generatedQuestion['category_id'] : 0, //$request->input('category_id'), // Assuming you still have a category input
             ]);
 
             $exam->questions()->save($question);
         }
     }
-
-    
 }

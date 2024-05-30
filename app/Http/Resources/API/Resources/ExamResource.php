@@ -18,10 +18,10 @@ class ExamResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'doctor' => $this->doctor->name, // Assuming you want to include the doctor's name
-            'questions' => QuestionResource::collection($this->whenLoaded('questions')),
-            // Only include questions if loaded (e.g., in show() method)
-            // ... other fields you want to include ...
+            'doctor_name' => $this->doctor->name,
+            'questions_count' => $this->questions->count(), // Add back questions_count
+            'questions' => QuestionResource::collection($this->whenLoaded('questions')), // Include questions
+            // ... other fields you need ...
         ];
     }
 }

@@ -17,12 +17,31 @@ class ExamAttemptController extends Controller
     {
         $this->middleware('auth:sanctum');
     }
+    public function index(Request $request)
+    {
+        $attempts = ExamAttempt::where('student_id', Auth::id())
+            ->with('exam.questions', 'answers.assessment')
+            ->get();
 
+        return ExamAttemptResource::collection($attempts);
+    }
+    public function show(ExamAttempt $attempt)
+    {
+        // Authorization (make sure the student can only see their own attempt)
+        if (Auth::user()->id !== $attempt->student_id) {
+            abort(403, 'Unauthorized');
+        }
+
+        $attempt->load('exam.questions', 'answers.assessment');
+
+        return new ExamAttemptResource($attempt);
+    }
+
+    // Start an Exam Attempt
     public function start(Exam $exam)
     {
-        // 1. Authorization (ensure the student can take this exam)
-        //    - Check exam status (open, etc.)
-        //    - Check if the student has permission (if using ExamPermission)
+        // Authorization: Make sure the student is allowed to take this exam.
+        // ... (Implement your authorization logic here) ...
 
         $attempt = $exam->attempts()->create([
             'student_id' => Auth::id(),
@@ -32,31 +51,22 @@ class ExamAttemptController extends Controller
         return new ExamAttemptResource($attempt);
     }
 
-    public function show(Exam $exam, ExamAttempt $attempt)
-    {
-        // 1. Authorization: Ensure only the attempt owner can view it
-        $this->authorize('view', $attempt);
-
-        return new ExamAttemptResource($attempt->load('answers'));
-    }
-
+    // Submit Answers
     public function submit(Request $request, Exam $exam, ExamAttempt $attempt)
     {
-        // 1. Authorization: Ensure only the attempt owner can submit
-        $this->authorize('update', $attempt);
+        // Authorization: Make sure the authenticated user owns this attempt
+        if (Auth::user()->id !== $attempt->student_id) {
+            abort(403, 'Unauthorized');
+        }
 
-        // 2. Validate submitted answers (logic depends on your question types)
-        $validator = Validator::make($request->all(), [
+        // 1. Validation:
+        $request->validate([
             'answers' => 'required|array',
             'answers.*.question_id' => 'required|exists:questions,id',
             'answers.*.student_answer' => 'required', // Add more validation as needed
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        // 3. Store answers
+        // 2. Store Answers:
         foreach ($request->input('answers', []) as $answerData) {
             $attempt->answers()->create([
                 'question_id' => $answerData['question_id'],
@@ -64,16 +74,8 @@ class ExamAttemptController extends Controller
             ]);
         }
 
-        // 4. (Optional) Send answers to Ollama, handle async processing
-
-        // 5. Update attempt
-        $attempt->update([
-            'end_time' => now(),
-            'submitted' => true,
-        ]);
-
-        // 6. Calculate and store the degree (if not using async Ollama)
-        // ... your logic to calculate and store the degree ...
+        // 3. Update end time:
+        $attempt->update(['end_time' => now(), 'submitted' => true]);
 
         return new ExamAttemptResource($attempt->load('answers'));
     }

@@ -15,7 +15,9 @@ class ExamAttemptResource extends JsonResource
             'start_time' => $this->start_time,
             'end_time' => $this->end_time,
             'submitted' => $this->submitted,
-            // ... other fields you want to include ...
+            'exam' => new ExamResource($this->whenLoaded('exam')),
+            'answers' => AnswerResource::collection($this->whenLoaded('answers')),
+
         ];
     }
 }

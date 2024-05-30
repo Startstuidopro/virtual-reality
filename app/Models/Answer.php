@@ -12,7 +12,7 @@ class Answer extends Model
     protected $fillable = [
         'attempt_id',
         'question_id',
-        'student_answer',
+        'student_answer', 'degree'
     ];
 
     public function attempt()

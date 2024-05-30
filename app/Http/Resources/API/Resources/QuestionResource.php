@@ -13,7 +13,8 @@ class QuestionResource extends JsonResource
             'question_text' => $this->question_text,
             'answer_type' => $this->answer_type,
             'options' => $this->options,
-            'category_id'=>$this->category_id
+            'category_id' => $this->category_id,
+            'default_degree' => $this->default_degree,
             // ... other fields ...
         ];
     }
